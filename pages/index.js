@@ -2,7 +2,21 @@ import { useState } from "react";
 import PriceDisplay from "../components/PriceDisplay";
 import DateRangePicker from "../components/DateRangePicker";
 
-export default function Home() {
+export async function getServerSideProps() {
+  const currentDateTime = new Date().toLocaleString("en-US", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  return { props: { initialDateTime: currentDateTime } };
+}
+
+export default function Home({ initialDateTime }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [priceRange, setPriceRange] = useState([]);
 
@@ -20,7 +34,7 @@ export default function Home() {
   return (
     <div style={{ padding: "20px", backgroundColor: "#1a1a1a", minHeight: "100vh" }}>
       {!showDatePicker ? (
-        <PriceDisplay onCheckPriceRange={handleCheckPriceRange} />
+        <PriceDisplay onCheckPriceRange={handleCheckPriceRange} initialDateTime={initialDateTime} />
       ) : (
         <DateRangePicker onSubmit={handleDateSubmit} />
       )}

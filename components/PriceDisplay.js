@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 
-const PriceDisplay = ({ onCheckPriceRange }) => {
+const PriceDisplay = ({ onCheckPriceRange, initialDateTime }) => {
   const [prices, setPrices] = useState({});
   const [loading, setLoading] = useState(true);
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [currentDateTime, setCurrentDateTime] = useState(initialDateTime);
 
   const fetchPrices = async () => {
     setLoading(true);
@@ -39,22 +39,22 @@ const PriceDisplay = ({ onCheckPriceRange }) => {
   useEffect(() => {
     fetchPrices();
     const timer = setInterval(() => {
-      setCurrentDateTime(new Date());
+      setCurrentDateTime(new Date().toLocaleString("en-US", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
   const formatDateTime = (date) => {
-    return date.toLocaleString("en-US", {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    });
+    return date; // Use the passed or updated date directly
   };
 
   return (
