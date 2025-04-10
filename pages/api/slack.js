@@ -166,15 +166,15 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "`------------------------------------------------`\n" +
-                        "| NAME                  | PRICE                  |\n" +
-                        "|-----------------------|-----------------------|\n" +
-                        "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
-                        "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
-                        "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
-                        "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
-                        "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
-                        "|-----------------------|-----------------------|",
+                  text: "--------------------------------------\n" +
+                        " NAME                    PRICE                   \n" +
+                        "--------------------------------------\n" +
+                        " DIAMOND            ₹ " + priceMap["DIAMOND"] + " /gm\n" +
+                        " GOLD (18K)          ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
+                        " GOLD (22K)          ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
+                        " ROSEGOLD          ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
+                        " SILVER                   ₹ " + priceMap["SILVER"] + " /gm\n" +
+                        "--------------------------------------",
                 },
               },
               {
@@ -262,15 +262,15 @@ export default async function handler(req, res) {
 
           // Send today's prices in a message
           const messageText = `*Today's Prices (${currentDateTime})*\n` +
-                             "`------------------------------------------------`\n" +
-                             "| NAME                  | PRICE                  |\n" +
-                             "|-----------------------|-----------------------|\n" +
-                             "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
-                             "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
-                             "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
-                             "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
-                             "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
-                             "|-----------------------|-----------------------|";
+                             "--------------------------------------\n" +
+                        " NAME                    PRICE                   \n" +
+                        "--------------------------------------\n" +
+                        " DIAMOND            ₹ " + priceMap["DIAMOND"] + " /gm\n" +
+                        " GOLD (18K)          ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
+                        " GOLD (22K)          ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
+                        " ROSEGOLD          ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
+                        " SILVER                   ₹ " + priceMap["SILVER"] + " /gm\n" +
+                        "--------------------------------------";
           await app.client.chat.postMessage({
             channel: payload.user.id,
             text: messageText,
