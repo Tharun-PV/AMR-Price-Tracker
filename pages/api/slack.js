@@ -167,13 +167,13 @@ export default async function handler(req, res) {
                 text: {
                   type: "mrkdwn",
                   text: "-------------------  -------------------\n" +
-                        "NAME                PRICE\n" +
+                        "NAME                  PRICE\n" +
                         "-------------------  -------------------\n" +
-                        "DIAMOND             ₹ " + priceMap["DIAMOND"] + " /gm\n" +
-                        "GOLD (18K)          ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
-                        "GOLD (22K)          ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
-                        "ROSEGOLD            ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
-                        "SILVER              ₹ " + priceMap["SILVER"] + " /gm\n" +
+                        "DIAMOND               ₹ " + priceMap["DIAMOND"] + " /gm\n" +
+                        "GOLD (18K)            ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
+                        "GOLD (22K)            ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
+                        "ROSEGOLD              ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
+                        "SILVER                ₹ " + priceMap["SILVER"] + " /gm\n" +
                         "-------------------  -------------------",
                 },
               },
