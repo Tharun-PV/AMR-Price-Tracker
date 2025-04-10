@@ -151,7 +151,7 @@ export default async function handler(req, res) {
                 type: "header",
                 text: {
                   type: "plain_text",
-                  text: "AMR Price Tracker",
+                  text: "💎 AMR Price Tracker", // Added diamond emoji
                 },
               },
               {
@@ -165,14 +165,14 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "||NAME||PRICE||",
+                  text: "NAME | PRICE",
                 },
               },
               {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: `||DIAMOND||₹ ${priceMap["DIAMOND"]} /gm||\n||GOLD (18K)||₹ ${priceMap["GOLD (18K)"]} /gm||\n||GOLD (22K)||₹ ${priceMap["GOLD (22K)"]} /gm||\n||ROSEGOLD||₹ ${priceMap["ROSEGOLD"]} /gm||\n||SILVER||₹ ${priceMap["SILVER"]} /gm||`,
+                  text: `DIAMOND | ₹ ${priceMap["DIAMOND"]} /gm\nGOLD (18K) | ₹ ${priceMap["GOLD (18K)"]} /gm\nGOLD (22K) | ₹ ${priceMap["GOLD (22K)"]} /gm\nROSEGOLD | ₹ ${priceMap["ROSEGOLD"]} /gm\nSILVER | ₹ ${priceMap["SILVER"]} /gm`,
                 },
               },
               {
@@ -184,16 +184,16 @@ export default async function handler(req, res) {
                       type: "plain_text",
                       text: "Check Current Price",
                     },
-                    style: "primary",
+                    // Removed style: "primary" to use default button appearance
                     action_id: "check_current_price",
                   },
                   {
                     type: "button",
                     text: {
                       type: "plain_text",
-                      text: "📅 Check Price Range",
+                      text: "Check Price Range",
                     },
-                    style: "danger",
+                    // Removed style: "danger" and calendar emoji
                     action_id: "check_price_range",
                   },
                 ],
@@ -269,7 +269,7 @@ export default async function handler(req, res) {
                   type: "header",
                   text: {
                     type: "plain_text",
-                    text: "AMR Price Tracker",
+                    text: "💎 AMR Price Tracker", // Added diamond emoji
                   },
                 },
                 {
@@ -283,14 +283,14 @@ export default async function handler(req, res) {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "||NAME||PRICE||",
+                    text: "NAME | PRICE",
                   },
                 },
                 {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: `||DIAMOND||₹ ${priceMap["DIAMOND"]} /gm||\n||GOLD (18K)||₹ ${priceMap["GOLD (18K)"]} /gm||\n||GOLD (22K)||₹ ${priceMap["GOLD (22K)"]} /gm||\n||ROSEGOLD||₹ ${priceMap["ROSEGOLD"]} /gm||\n||SILVER||₹ ${priceMap["SILVER"]} /gm||`,
+                    text: `DIAMOND | ₹ ${priceMap["DIAMOND"]} /gm\nGOLD (18K) | ₹ ${priceMap["GOLD (18K)"]} /gm\nGOLD (22K) | ₹ ${priceMap["GOLD (22K)"]} /gm\nROSEGOLD | ₹ ${priceMap["ROSEGOLD"]} /gm\nSILVER | ₹ ${priceMap["SILVER"]} /gm`,
                   },
                 },
                 {
@@ -302,16 +302,16 @@ export default async function handler(req, res) {
                         type: "plain_text",
                         text: "Check Current Price",
                       },
-                      style: "primary",
+                      // Removed style: "primary" to use default button appearance
                       action_id: "check_current_price",
                     },
                     {
                       type: "button",
                       text: {
                         type: "plain_text",
-                        text: "📅 Check Price Range",
+                        text: "Check Price Range",
                       },
-                      style: "danger",
+                      // Removed style: "danger" and calendar emoji
                       action_id: "check_price_range",
                     },
                   ],
