@@ -105,12 +105,36 @@ export default async function handler(req, res) {
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
           (process.env.NODE_ENV === "development" ? "http://localhost:3000" : `${req.headers.host}`);
         const prices = await fetch(`${baseUrl}/api/price`).then(res => res.json());
-        const priceMap = prices.reduce((acc, item) => {
-          let key = item.metaProdTypeName === "Gold" ? `GOLD (${item.purity.split("K")[0]}K)` : item.metaProdTypeName;
-          acc[key] = item.rate / item.unit || "-";
-          return acc;
-        }, {});
+        console.log("Price data:", prices); // Debug log
+        const priceMap = {
+          "DIAMOND": "-",
+          "GOLD (18K)": "-",
+          "GOLD (22K)": "-",
+          "ROSEGOLD": "-",
+          "SILVER": "-",
+        };
+        prices.forEach(item => {
+          let key;
+          switch (item.metaProdTypeName) {
+            case "Gold":
+              key = `GOLD (${item.purity.split("K")[0]}K)`;
+              break;
+            case "ROSEGOLD":
+              key = "ROSEGOLD";
+              break;
+            case "Diamond":
+              key = "DIAMOND";
+              break;
+            case "Silver":
+              key = "SILVER";
+              break;
+            default:
+              key = item.metaProdTypeName;
+          }
+          if (key) priceMap[key] = item.rate / item.unit || "-";
+        });
         const currentDateTime = new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
           weekday: "short",
           day: "2-digit",
           month: "short",
@@ -194,18 +218,42 @@ export default async function handler(req, res) {
     try {
       const payload = JSON.parse(body.payload);
       if (payload.type === "block_actions") {
-        const action = payload.actions[0];
+        const action = payload.actions[0]; // Define action here
         res.status(200).json({});
         if (action.action_id === "check_current_price") {
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
             (process.env.NODE_ENV === "development" ? "http://localhost:3000" : `${req.headers.host}`);
           const prices = await fetch(`${baseUrl}/api/price`).then(res => res.json());
-          const priceMap = prices.reduce((acc, item) => {
-            let key = item.metaProdTypeName === "Gold" ? `GOLD (${item.purity.split("K")[0]}K)` : item.metaProdTypeName;
-            acc[key] = item.rate / item.unit || "-";
-            return acc;
-          }, {});
+          console.log("Price data:", prices); // Debug log
+          const priceMap = {
+            "DIAMOND": "-",
+            "GOLD (18K)": "-",
+            "GOLD (22K)": "-",
+            "ROSEGOLD": "-",
+            "SILVER": "-",
+          };
+          prices.forEach(item => {
+            let key;
+            switch (item.metaProdTypeName) {
+              case "Gold":
+                key = `GOLD (${item.purity.split("K")[0]}K)`;
+                break;
+              case "ROSEGOLD":
+                key = "ROSEGOLD";
+                break;
+              case "Diamond":
+                key = "DIAMOND";
+                break;
+              case "Silver":
+                key = "SILVER";
+                break;
+              default:
+                key = item.metaProdTypeName;
+            }
+            if (key) priceMap[key] = item.rate / item.unit || "-";
+          });
           const currentDateTime = new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Kolkata",
             weekday: "short",
             day: "2-digit",
             month: "short",
