@@ -166,15 +166,15 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "-------  -------\n" +
-                        "NAME    PRICE\n" +
-                        "-------  -------\n" +
-                        "DIAMOND  ₹ " + priceMap["DIAMOND"] + " /gm\n" +
-                        "GOLD (18K) ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
-                        "GOLD (22K) ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
-                        "ROSEGOLD ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
-                        "SILVER   ₹ " + priceMap["SILVER"] + " /gm\n" +
-                        "-------  -------",
+                  text: "`------------------------------------------------`\n" +
+                        "| NAME                  | PRICE                  |\n" +
+                        "|-----------------------|-----------------------|\n" +
+                        "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
+                        "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
+                        "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
+                        "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
+                        "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
+                        "|-----------------------|-----------------------|",
                 },
               },
               {
@@ -284,15 +284,15 @@ export default async function handler(req, res) {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "-------  -------\n" +
-                          "NAME    PRICE\n" +
-                          "-------  -------\n" +
-                          "DIAMOND  ₹ " + priceMap["DIAMOND"] + " /gm\n" +
-                          "GOLD (18K) ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
-                          "GOLD (22K) ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
-                          "ROSEGOLD ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
-                          "SILVER   ₹ " + priceMap["SILVER"] + " /gm\n" +
-                          "-------  -------",
+                    text: "`------------------------------------------------`\n" +
+                          "| NAME                  | PRICE                  |\n" +
+                          "|-----------------------|-----------------------|\n" +
+                          "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
+                          "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
+                          "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
+                          "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
+                          "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
+                          "|-----------------------|-----------------------|",
                   },
                 },
                 {
@@ -319,7 +319,7 @@ export default async function handler(req, res) {
               ],
             },
           });
-          // Removed the chat.postMessage call to avoid sending a message
+          // No message sent on refresh
         } else if (action.action_id === "check_price_range") {
           await openDateRangeModal(payload.trigger_id, payload.user.id);
         }
