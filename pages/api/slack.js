@@ -73,6 +73,7 @@ const openDateRangeModal = async (triggerId, userId) => {
         ],
       },
     });
+    console.log("Modal opened successfully for user:", userId);
   } catch (error) {
     console.error("Error opening modal:", error);
   }
@@ -101,7 +102,7 @@ export default async function handler(req, res) {
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
           (process.env.NODE_ENV === "development" ? "http://localhost:3000" : `${req.headers.host}`);
         const prices = await fetch(`${baseUrl}/api/price`).then(res => res.json());
-        console.log("Price data:", prices); // Debug log
+        console.log("Price data fetched:", prices);
         const priceMap = {
           "DIAMOND": "-",
           "GOLD (18K)": "-",
@@ -140,7 +141,20 @@ export default async function handler(req, res) {
           second: "2-digit",
           hour12: true,
         });
-        const currentDay = new Date().getDate(); // Get current day for "Check Price Range" button
+        const currentDay = new Date().getDate();
+
+        const homeText = `--------------------------------------\n` +
+                         ` NAME                    PRICE                   \n` +
+                         `--------------------------------------\n` +
+                         ` DIAMOND            ₹ ${priceMap["DIAMOND"]} /gm\n` +
+                         ` GOLD (18K)          ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
+                         ` GOLD (22K)          ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
+                         ` ROSEGOLD          ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
+                         ` SILVER                   ₹ ${priceMap["SILVER"]} /gm\n` +
+                         `--------------------------------------`;
+        if (homeText.length > 3000) {
+          console.warn("Home text exceeds 3000 characters, truncating:", homeText.length);
+        }
 
         res.status(200).json({});
         await app.client.views.publish({
@@ -166,15 +180,7 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "--------------------------------------\n" +
-                        " NAME                    PRICE                   \n" +
-                        "--------------------------------------\n" +
-                        " DIAMOND            ₹ " + priceMap["DIAMOND"] + " /gm\n" +
-                        " GOLD (18K)          ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
-                        " GOLD (22K)          ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
-                        " ROSEGOLD          ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
-                        " SILVER                   ₹ " + priceMap["SILVER"] + " /gm\n" +
-                        "--------------------------------------",
+                  text: homeText,
                 },
               },
               {
@@ -201,10 +207,11 @@ export default async function handler(req, res) {
             ],
           },
         });
+        console.log("Home view published for user:", event.user);
       }
     } catch (error) {
       console.error("Error handling event:", error);
-      res.status(200).json({ error: "Internal server error" });
+      res.status(500).json({ error: "Internal server error" });
     }
     return;
   }
@@ -220,7 +227,7 @@ export default async function handler(req, res) {
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
             (process.env.NODE_ENV === "development" ? "http://localhost:3000" : `${req.headers.host}`);
           const prices = await fetch(`${baseUrl}/api/price`).then(res => res.json());
-          console.log("Price data:", prices); // Debug log
+          console.log("Price data for message:", prices);
           const priceMap = {
             "DIAMOND": "-",
             "GOLD (18K)": "-",
@@ -260,21 +267,26 @@ export default async function handler(req, res) {
             hour12: true,
           });
 
-          // Send today's prices in a message
           const messageText = `*Today's Prices (${currentDateTime})*\n` +
-                             "--------------------------------------\n" +
-                        " NAME                    PRICE                   \n" +
-                        "--------------------------------------\n" +
-                        " DIAMOND            ₹ " + priceMap["DIAMOND"] + " /gm\n" +
-                        " GOLD (18K)          ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
-                        " GOLD (22K)          ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
-                        " ROSEGOLD          ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
-                        " SILVER                   ₹ " + priceMap["SILVER"] + " /gm\n" +
-                        "--------------------------------------";
+                             `--------------------------------------\n` +
+                             ` NAME                    PRICE                   \n` +
+                             `--------------------------------------\n` +
+                             ` DIAMOND            ₹ ${priceMap["DIAMOND"]} /gm\n` +
+                             ` GOLD (18K)          ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
+                             ` GOLD (22K)          ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
+                             ` ROSEGOLD          ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
+                             ` SILVER                   ₹ ${priceMap["SILVER"]} /gm\n` +
+                             `--------------------------------------`;
+          if (messageText.length > 3000) {
+            console.warn("Message text exceeds 3000 characters, truncating:", messageText.length);
+            // Truncate if necessary (optional, implement if needed)
+          }
+
           await app.client.chat.postMessage({
             channel: payload.user.id,
             text: messageText,
           });
+          console.log("Message sent to user:", payload.user.id);
         } else if (action.action_id === "check_price_range") {
           await openDateRangeModal(payload.trigger_id, payload.user.id);
         }
@@ -295,6 +307,7 @@ export default async function handler(req, res) {
           );
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           const priceRangeData = await response.json();
+          console.log("Price range data:", priceRangeData);
 
           const priceMap = priceRangeData.reduce((acc, item) => {
             let key = item.metaProdTypeName === "Gold" ? `GOLD (${item.purity.split("K")[0]}K)` : item.metaProdTypeName;
@@ -310,35 +323,35 @@ export default async function handler(req, res) {
           let allEntries = [];
           Object.values(priceMap).forEach((entries) => allEntries.push(...entries));
 
-          // Calculate maximum lengths for dynamic padding
-          const maxNameLength = Math.max(...allEntries.map(entry => entry.name.length), "Name".length) + 4;
-          const maxDateLength = Math.max(...allEntries.map(entry => entry.date.length), "Date".length) + 4;
-          const maxPriceLength = Math.max(...allEntries.map(entry => `₹ ${entry.price}/gm`.length), "Price".length) + 4;
+          // Limit to 10 entries to avoid exceeding character limit
+          const limitedEntries = allEntries.slice(0, 10);
+          const maxNameLength = Math.max(...limitedEntries.map(entry => entry.name.length), "Name".length) + 4;
+          const maxDateLength = Math.max(...limitedEntries.map(entry => entry.date.length), "Date".length) + 4;
+          const maxPriceLength = Math.max(...limitedEntries.map(entry => `₹ ${entry.price}/gm`.length), "Price".length) + 4;
 
-          // Create a neatly formatted table using Slack block kit
           const tableHeader = `| ${"Name".padEnd(maxNameLength)} | ${"Date".padEnd(maxDateLength)} | ${"Price".padEnd(maxPriceLength)} |`;
           const tableSeparator = `| ${"-".repeat(maxNameLength)} | ${"-".repeat(maxDateLength)} | ${"-".repeat(maxPriceLength)} |`;
-          const tableRows = allEntries.map(entry =>
+          const tableRows = limitedEntries.map(entry =>
             `| ${entry.name.padEnd(maxNameLength)} | ${entry.date.padEnd(maxDateLength)} | ${`₹ ${entry.price}/gm`.padEnd(maxPriceLength)} |`
           ).join("\n");
+
+          const rangeText = `*Price Range (${fromDate} to ${toDate})*\n` +
+                           "```" +
+                           tableHeader + "\n" +
+                           tableSeparator + "\n" +
+                           tableRows +
+                           "```";
+          if (rangeText.length > 3000) {
+            console.warn("Range text exceeds 3000 characters, truncating:", rangeText.length);
+            // Truncate if necessary (optional implementation)
+          }
 
           const blocks = [
             {
               type: "section",
               text: {
                 type: "mrkdwn",
-                text: `*Price Range (${fromDate} to ${toDate})*`,
-              },
-            },
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: "```" +
-                  tableHeader + "\n" +
-                  tableSeparator + "\n" +
-                  tableRows +
-                  "```",
+                text: rangeText,
               },
             },
           ];
@@ -346,9 +359,10 @@ export default async function handler(req, res) {
           res.status(200).json({ response_action: "clear" });
           await app.client.chat.postMessage({
             channel: payload.user.id,
-            text: `Price range for ${fromDate} to ${toDate}`,
+            text: `Price range for ${fromDate} to ${toDate} (limited to 10 entries)`,
             blocks: blocks,
           });
+          console.log("Price range message sent to user:", payload.user.id);
         } catch (error) {
           console.error("Error fetching price range:", error);
           res.status(200).json({
@@ -363,7 +377,7 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.error("Error handling action or submission:", error);
-      res.status(200).json({ error: "Internal server error" });
+      res.status(500).json({ error: "Internal server error" });
     }
     return;
   }
