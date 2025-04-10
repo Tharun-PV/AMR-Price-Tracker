@@ -204,7 +204,7 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.error("Error handling event:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(200).json({ error: "Internal server error" });
     }
     return;
   }
@@ -259,67 +259,22 @@ export default async function handler(req, res) {
             second: "2-digit",
             hour12: true,
           });
-          const currentDay = new Date().getDate(); // Get current day for "Check Price Range" button
 
-          await app.client.views.publish({
-            user_id: payload.user.id,
-            view: {
-              type: "home",
-              blocks: [
-                {
-                  type: "header",
-                  text: {
-                    type: "plain_text",
-                    text: "💠 AMR Price Tracker",
-                  },
-                },
-                {
-                  type: "section",
-                  text: {
-                    type: "mrkdwn",
-                    text: `*Date & Time: ${currentDateTime}*`,
-                  },
-                },
-                {
-                  type: "section",
-                  text: {
-                    type: "mrkdwn",
-                    text: "`------------------------------------------------`\n" +
-                          "| NAME                  | PRICE                  |\n" +
-                          "|-----------------------|-----------------------|\n" +
-                          "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
-                          "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
-                          "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
-                          "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
-                          "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
-                          "|-----------------------|-----------------------|",
-                  },
-                },
-                {
-                  type: "actions",
-                  elements: [
-                    {
-                      type: "button",
-                      text: {
-                        type: "plain_text",
-                        text: `🔄 Check Current Price`,
-                      },
-                      action_id: "check_current_price",
-                    },
-                    {
-                      type: "button",
-                      text: {
-                        type: "plain_text",
-                        text: `📅 Check Price Range ${currentDay}`,
-                      },
-                      action_id: "check_price_range",
-                    },
-                  ],
-                },
-              ],
-            },
+          // Send today's prices in a message
+          const messageText = `*Today's Prices (${currentDateTime})*\n` +
+                             "`------------------------------------------------`\n" +
+                             "| NAME                  | PRICE                  |\n" +
+                             "|-----------------------|-----------------------|\n" +
+                             "| DIAMOND               | ₹ " + priceMap["DIAMOND"] + " /gm      |\n" +
+                             "| GOLD (18K)            | ₹ " + priceMap["GOLD (18K)"] + " /gm  |\n" +
+                             "| GOLD (22K)            | ₹ " + priceMap["GOLD (22K)"] + " /gm  |\n" +
+                             "| ROSEGOLD              | ₹ " + priceMap["ROSEGOLD"] + " /gm    |\n" +
+                             "| SILVER                | ₹ " + priceMap["SILVER"] + " /gm      |\n" +
+                             "|-----------------------|-----------------------|";
+          await app.client.chat.postMessage({
+            channel: payload.user.id,
+            text: messageText,
           });
-          // No message sent on refresh
         } else if (action.action_id === "check_price_range") {
           await openDateRangeModal(payload.trigger_id, payload.user.id);
         }
@@ -408,7 +363,7 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.error("Error handling action or submission:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(200).json({ error: "Internal server error" });
     }
     return;
   }
