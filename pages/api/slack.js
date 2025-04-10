@@ -71,10 +71,6 @@ const openDateRangeModal = async (triggerId, userId) => {
             },
           },
         ],
-        hint: {
-          type: "plain_text",
-          text: "Tap the date fields to select dates.",
-        },
       },
     });
   } catch (error) {
@@ -218,7 +214,7 @@ export default async function handler(req, res) {
     try {
       const payload = JSON.parse(body.payload);
       if (payload.type === "block_actions") {
-        const action = payload.actions[0]; // Define action here
+        const action = payload.actions[0];
         res.status(200).json({});
         if (action.action_id === "check_current_price") {
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
