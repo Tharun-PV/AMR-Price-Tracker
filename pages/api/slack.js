@@ -140,6 +140,7 @@ export default async function handler(req, res) {
           second: "2-digit",
           hour12: true,
         });
+        const currentDay = new Date().getDate(); // Get current day for "Check Price Range" button
 
         res.status(200).json({});
         await app.client.views.publish({
@@ -151,7 +152,7 @@ export default async function handler(req, res) {
                 type: "header",
                 text: {
                   type: "plain_text",
-                  text: "💎 AMR Price Tracker", // Added diamond emoji
+                  text: "💠 AMR Price Tracker", // Changed to blue diamond with dot emoji
                 },
               },
               {
@@ -165,14 +166,20 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "NAME | PRICE",
+                  text: "NAME      PRICE",
                 },
               },
               {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: `DIAMOND | ₹ ${priceMap["DIAMOND"]} /gm\nGOLD (18K) | ₹ ${priceMap["GOLD (18K)"]} /gm\nGOLD (22K) | ₹ ${priceMap["GOLD (22K)"]} /gm\nROSEGOLD | ₹ ${priceMap["ROSEGOLD"]} /gm\nSILVER | ₹ ${priceMap["SILVER"]} /gm`,
+                  text: "- - - - - - - - - - - -\n" +
+                        `DIAMOND      ₹ ${priceMap["DIAMOND"]} /gm\n` +
+                        `GOLD (18K)   ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
+                        `GOLD (22K)   ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
+                        `ROSEGOLD     ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
+                        `SILVER       ₹ ${priceMap["SILVER"]} /gm\n` +
+                        "- - - - - - - - - - - -",
                 },
               },
               {
@@ -182,18 +189,16 @@ export default async function handler(req, res) {
                     type: "button",
                     text: {
                       type: "plain_text",
-                      text: "Check Current Price",
+                      text: `🔄 Check Current Price`,
                     },
-                    // Removed style: "primary" to use default button appearance
                     action_id: "check_current_price",
                   },
                   {
                     type: "button",
                     text: {
                       type: "plain_text",
-                      text: "Check Price Range",
+                      text: `📅 Check Price Range ${currentDay}`,
                     },
-                    // Removed style: "danger" and calendar emoji
                     action_id: "check_price_range",
                   },
                 ],
@@ -259,6 +264,7 @@ export default async function handler(req, res) {
             second: "2-digit",
             hour12: true,
           });
+          const currentDay = new Date().getDate(); // Get current day for "Check Price Range" button
 
           await app.client.views.publish({
             user_id: payload.user.id,
@@ -269,7 +275,7 @@ export default async function handler(req, res) {
                   type: "header",
                   text: {
                     type: "plain_text",
-                    text: "💎 AMR Price Tracker", // Added diamond emoji
+                    text: "💠 AMR Price Tracker", // Changed to blue diamond with dot emoji
                   },
                 },
                 {
@@ -283,14 +289,20 @@ export default async function handler(req, res) {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "NAME | PRICE",
+                    text: "NAME      PRICE",
                   },
                 },
                 {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: `DIAMOND | ₹ ${priceMap["DIAMOND"]} /gm\nGOLD (18K) | ₹ ${priceMap["GOLD (18K)"]} /gm\nGOLD (22K) | ₹ ${priceMap["GOLD (22K)"]} /gm\nROSEGOLD | ₹ ${priceMap["ROSEGOLD"]} /gm\nSILVER | ₹ ${priceMap["SILVER"]} /gm`,
+                    text: "- - - - - - - - - - - -\n" +
+                          `DIAMOND      ₹ ${priceMap["DIAMOND"]} /gm\n` +
+                          `GOLD (18K)   ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
+                          `GOLD (22K)   ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
+                          `ROSEGOLD     ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
+                          `SILVER       ₹ ${priceMap["SILVER"]} /gm\n` +
+                          "- - - - - - - - - - - -",
                   },
                 },
                 {
@@ -300,18 +312,16 @@ export default async function handler(req, res) {
                       type: "button",
                       text: {
                         type: "plain_text",
-                        text: "Check Current Price",
+                        text: `🔄 Check Current Price`,
                       },
-                      // Removed style: "primary" to use default button appearance
                       action_id: "check_current_price",
                     },
                     {
                       type: "button",
                       text: {
                         type: "plain_text",
-                        text: "Check Price Range",
+                        text: `📅 Check Price Range ${currentDay}`,
                       },
-                      // Removed style: "danger" and calendar emoji
                       action_id: "check_price_range",
                     },
                   ],
