@@ -78,6 +78,14 @@ const openDateRangeModal = async (triggerId, userId) => {
   }
 };
 
+// Function to calculate days difference
+const getDaysDifference = (date1, date2) => {
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+  const diffTime = Math.abs(d2 - d1);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
@@ -152,7 +160,7 @@ export default async function handler(req, res) {
                 type: "header",
                 text: {
                   type: "plain_text",
-                  text: "💠 AMR Price Tracker", // Changed to blue diamond with dot emoji
+                  text: "💠 AMR Price Tracker",
                 },
               },
               {
@@ -166,20 +174,20 @@ export default async function handler(req, res) {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "NAME      PRICE",
+                  text: "NAME         PRICE",
                 },
               },
               {
                 type: "section",
                 text: {
                   type: "mrkdwn",
-                  text: "- - - - - - - - - - - -\n" +
-                        `DIAMOND      ₹ ${priceMap["DIAMOND"]} /gm\n` +
-                        `GOLD (18K)   ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
-                        `GOLD (22K)   ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
-                        `ROSEGOLD     ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
-                        `SILVER       ₹ ${priceMap["SILVER"]} /gm\n` +
-                        "- - - - - - - - - - - -",
+                  text: "--------------------------------\n" +
+                        "DIAMOND      ₹ " + priceMap["DIAMOND"] + " /gm\n" +
+                        "GOLD (18K)   ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
+                        "GOLD (22K)   ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
+                        "ROSEGOLD     ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
+                        "SILVER       ₹ " + priceMap["SILVER"] + " /gm\n" +
+                        "--------------------------------",
                 },
               },
               {
@@ -275,7 +283,7 @@ export default async function handler(req, res) {
                   type: "header",
                   text: {
                     type: "plain_text",
-                    text: "💠 AMR Price Tracker", // Changed to blue diamond with dot emoji
+                    text: "💠 AMR Price Tracker",
                   },
                 },
                 {
@@ -289,20 +297,20 @@ export default async function handler(req, res) {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "NAME      PRICE",
+                    text: "NAME         PRICE",
                   },
                 },
                 {
                   type: "section",
                   text: {
                     type: "mrkdwn",
-                    text: "- - - - - - - - - - - -\n" +
-                          `DIAMOND      ₹ ${priceMap["DIAMOND"]} /gm\n` +
-                          `GOLD (18K)   ₹ ${priceMap["GOLD (18K)"]} /gm\n` +
-                          `GOLD (22K)   ₹ ${priceMap["GOLD (22K)"]} /gm\n` +
-                          `ROSEGOLD     ₹ ${priceMap["ROSEGOLD"]} /gm\n` +
-                          `SILVER       ₹ ${priceMap["SILVER"]} /gm\n` +
-                          "- - - - - - - - - - - -",
+                    text: "--------------------------------\n" +
+                          "DIAMOND      ₹ " + priceMap["DIAMOND"] + " /gm\n" +
+                          "GOLD (18K)   ₹ " + priceMap["GOLD (18K)"] + " /gm\n" +
+                          "GOLD (22K)   ₹ " + priceMap["GOLD (22K)"] + " /gm\n" +
+                          "ROSEGOLD     ₹ " + priceMap["ROSEGOLD"] + " /gm\n" +
+                          "SILVER       ₹ " + priceMap["SILVER"] + " /gm\n" +
+                          "--------------------------------",
                   },
                 },
                 {
@@ -344,6 +352,18 @@ export default async function handler(req, res) {
         const toDate = payload.view.state.values.to_date_block.to_date.selected_date;
 
         console.log("Submitting dates:", { fromDate, toDate });
+        const daysDiff = getDaysDifference(fromDate, toDate);
+        if (daysDiff > 10) {
+          res.status(200).json({
+            response_action: "errors",
+            errors: {
+              from_date_block: "Date range cannot exceed 10 days.",
+              to_date_block: "Date range cannot exceed 10 days.",
+            },
+          });
+          return;
+        }
+
         try {
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
             (process.env.NODE_ENV === "development" ? "http://localhost:3000" : `${req.headers.host}`);
